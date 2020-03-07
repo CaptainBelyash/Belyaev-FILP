@@ -1,0 +1,8 @@
+
+*.db
+filp_hw_counter/.vs/filp_hw_counter/v16/Browse.VC.opendb
+filp_hw_counter/.vs/filp_hw_counter/v16/ipch/AutoPCH/c3eb65b60c7ba550/FILP_HW_COUNTER.ipch
+filp_hw_counter/filp_hw_counter.sln
+filp_hw_counter/filp_hw_counter/filp_hw_counter.vcxproj
+filp_hw_counter/filp_hw_counter/filp_hw_counter.vcxproj.filters
+filp_hw_counter/filp_hw_counter/filp_hw_counter.vcxproj.user
