@@ -29,10 +29,18 @@ char* getSubString(char* text, int start, int lenght) {
 	return word;
 }
 
+struct StringComparer
+{
+	bool operator()(char const* a, char const* b) const
+	{
+		return strcmp(a, b) < 0;
+	}
+};
+
 void wordCount(char* bookName) {
 	int size = fileSize(bookName);
 	char* text = getTextFromFile(bookName, size);
-	map <char*, int> counter;
+	map <char*, int, StringComparer> counter;
 	int wordLenght = 0;
 	int i;
 	for (i = 0; i < size && text[i] > 0; i++) {
@@ -42,7 +50,7 @@ void wordCount(char* bookName) {
 		}
 		else {
 			if (wordLenght != 0) {
-				counter[*getSubString(text, i - wordLenght, wordLenght)] += 1;
+				counter[getSubString(text, i - wordLenght, wordLenght)] += 1;
 				wordLenght = 0;
 			}
 		}
@@ -51,7 +59,7 @@ void wordCount(char* bookName) {
 		counter[getSubString(text, i - wordLenght, wordLenght)] += 1;
 
 
-	for (map<char*, int>::iterator iter = counter.begin(); iter != counter.end(); iter++) {
+	for (map<char*, int, StringComparer>::iterator iter = counter.begin(); iter != counter.end(); iter++) {
 		cout << iter->first << " : " << iter->second << '\n';
 	}
 }
