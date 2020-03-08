@@ -1,38 +1,63 @@
 ﻿
 #include <iostream>
 #include <fstream>
+#include <map>
 
 using namespace std;
 
-int fileSize(char fileName[]) {
+int fileSize(char* fileName) {
 	ifstream file(fileName, ios::binary | ios::ate);
-	int lenght = int(file.tellg());
+	int size = file.tellg();
 	file.close();
-	return lenght;
+	return size;
 }
 
-char getDataFromFile(char fileName[]) {
-
+char* getTextFromFile(char* fileName, int size) {
+	ifstream file;
+	file.open(fileName);
+	char* textBuffer = new char[size + 1];
+	file.read(textBuffer, size);
+	textBuffer[size] = '\0';
+	file.close();
+	return textBuffer;
 }
 
-void myFunc(char bookName[]) {
-	int lenght = fileSize(bookName);
-	cout << lenght << endl;
-	ifstream bookFile;
-	bookFile.open(bookName);
-	char readerBuffer[50];
-	int n;
-	cout << "Say a number:" << endl;
-	cin >> n;
-	for (int i = 0; i < n; i++) {
-		bookFile >> readerBuffer;
-		cout << readerBuffer << " ";
+char* getSubString(char* text, int start, int lenght) {
+	char* word = new char[lenght + 1];
+	memcpy(word, text + start, lenght);
+	word[lenght] = '\0';
+	return word;
+}
+
+void wordCount(char* bookName) {
+	int size = fileSize(bookName);
+	char* text = getTextFromFile(bookName, size);
+	map <char*, int> counter;
+	int wordLenght = 0;
+	int i;
+	for (i = 0; i < size && text[i] > 0; i++) {
+		
+		if (isalpha(text[i])) {
+			wordLenght++;
+		}
+		else {
+			if (wordLenght != 0) {
+				counter[*getSubString(text, i - wordLenght, wordLenght)] += 1;
+				wordLenght = 0;
+			}
+		}
 	}
-	bookFile.close();
+	if (wordLenght != 0)
+		counter[getSubString(text, i - wordLenght, wordLenght)] += 1;
+
+
+	for (map<char*, int>::iterator iter = counter.begin(); iter != counter.end(); iter++) {
+		cout << iter->first << " : " << iter->second << '\n';
+	}
 }
 
 int main()
 {
 	char bookName[] = "book.txt";
-	myFunc(bookName);
+	wordCount(bookName);
 }
