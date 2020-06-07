@@ -49,7 +49,7 @@ public:
 		return *this;
 	}
 
-	T operator->() {
+	T* operator->() {
 		return ref;
 	}
 	
